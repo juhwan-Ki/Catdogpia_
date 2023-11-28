@@ -28,7 +28,7 @@ public class MainController {
         // 인기 커뮤니티글 리스트
         model.addAttribute("hotArticleList", communityService.findPopularArticlesWithinOneWeek());
 
-        return "page/index.html";
+        return "page/index";
     }
 
 }
