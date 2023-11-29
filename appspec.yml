@@ -1,4 +1,4 @@
-ersion: 0.0
+version: 0.0
 os: linux
 # S3에 있는 zip 파일이 EC2에 배포될 위치를 지정
 files:
