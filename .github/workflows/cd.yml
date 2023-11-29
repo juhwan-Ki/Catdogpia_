@@ -9,7 +9,7 @@ on:
 # 해당 yml 내에서 사용할 key - value
 env:
   S3_BUCKET_NAME: catdogpia-deploy
-  PROJECT_NAME: catdogpia
+  PROJECT_NAME: Catdogpia_
   
 jobs:
   build:
@@ -57,7 +57,7 @@ jobs:
       - name: Deploy
         run: |
           aws deploy create-deployment \
-          --application-name catdogpia \
+          --application-name Catdogpia_ \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --deployment-group-name catdogpia-cicd \
           --file-exists-behavior OVERWRITE \
