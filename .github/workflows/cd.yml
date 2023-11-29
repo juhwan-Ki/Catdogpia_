@@ -9,7 +9,7 @@ on:
 # 해당 yml 내에서 사용할 key - value
 env:
   S3_BUCKET_NAME: catdogpia-deploy
-  PROJECT_NAME: Catdogpia_
+  PROJECT_NAME: catdogpia
   
 jobs:
   build:
@@ -61,5 +61,5 @@ jobs:
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --deployment-group-name catdogpia-cicd \
           --file-exists-behavior OVERWRITE \
-          --s3-location bucket=catdogpia-deploy,bundleType=zip,key=cicd/$GITHUB_SHA.zip \
+          --s3-location bucket=catdogpia-deploy,bundleType=zip,key=catdogpia/$GITHUB_SHA.zip \
           --region ap-northeast-2 \
