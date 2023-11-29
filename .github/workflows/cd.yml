@@ -57,7 +57,7 @@ jobs:
       - name: Deploy
         run: |
           aws deploy create-deployment \
-          --application-name Catdogpia_ \
+          --application-name catdogpia-codedeploy \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --deployment-group-name catdogpia-cicd \
           --file-exists-behavior OVERWRITE \
