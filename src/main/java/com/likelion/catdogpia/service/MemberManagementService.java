@@ -22,7 +22,7 @@ public class MemberManagementService {
     private final MemberRepository memberRepository;
     // 공통
     private final QueryRepository queryRepository;
-    private final AdminCheck adminCheck;
+    //private final AdminCheck adminCheck;
 
     // 관리자인지 확인하는 메소드
     private void isAdmin(String loginId) {
