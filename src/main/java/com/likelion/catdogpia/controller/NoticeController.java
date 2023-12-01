@@ -7,6 +7,7 @@ import com.likelion.catdogpia.domain.entity.consultation.ConsulClassification;
 import com.likelion.catdogpia.domain.entity.product.QnAClassification;
 import com.likelion.catdogpia.jwt.JwtTokenProvider;
 import com.likelion.catdogpia.service.AdminService;
+import com.likelion.catdogpia.service.ConsultationManagementService;
 import com.likelion.catdogpia.service.NoticeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ import java.util.Arrays;
 public class NoticeController {
 
     private final NoticeService noticeService;
-    private final AdminService adminService;
+    private final ConsultationManagementService consultationService;
     private final JwtTokenProvider jwtTokenProvider;
 
     // 공지사항 목록
@@ -85,7 +86,7 @@ public class NoticeController {
     // 1:1문의 상세
     @GetMapping("/consultations/{consulId}")
     public String consultationDetails(@PathVariable Long consulId, Model model) {
-        model.addAttribute("consultation", adminService.findConsultation(consulId));
+        model.addAttribute("consultation", consultationService.findConsultation(consulId));
         return "page/notice/consultation-detail";
     }
 
