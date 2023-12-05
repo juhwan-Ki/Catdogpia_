@@ -1,16 +1,7 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
-
-name: CI
+name: CI/CD Docker
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 permissions:
@@ -28,10 +19,53 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-      shell: bash
-
+   # gradle caching - 빌드 시간 향상
+    - name: Gradle Caching
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+          
+    # yml 파일 생성 - application-scret.yml
+    - name: Copy Secret
+      env:
+        OCCUPY_SECRET: ${{ secrets.OCCUPY_SECRET }}
+        OCCUPY_SECRET_DIR: src/main/resources
+        #OCCUPY_SECRET_TEST_DIR: src/test/resources
+        OCCUPY_SECRET_DIR_FILE_NAME: application-secret.yml
+      run: echo $OCCUPY_SECRET | base64 --decode > $OCCUPY_SECRET_DIR/$OCCUPY_SECRET_DIR_FILE_NAME 
+          # echo $OCCUPY_SECRET | base64 --decode > $OCCUPY_SECRET_TEST_DIR/$OCCUPY_SECRET_DIR_FILE_NAME
+   
+   # gradle build
     - name: Build with Gradle
       run : ./gradlew clean build --exclude-task test
       shell: bash
+  
+  # docker build & push to production
+    - name: Docker build & push to prod
+      # if: contains(github.ref, 'main') 일단 main 밖에 없으니 주석처리 추후에 개발서버 배포시에 사용할 예정
+      run: |
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        docker build -f Dockerfile-dev -t ${{ secrets.DOCKER_USERNAME }}/catdogpia-prod .
+        docker push ${{ secrets.DOCKER_USERNAME }}/catdogpia-prod
+  
+  ## deploy to production
+    - name: Deploy to prod
+      uses: appleboy/ssh-action@master
+      id: deploy-prod
+      if: contains(github.ref, 'main')
+      with:
+        host: ${{ secrets.HOST_PROD }} # EC2 퍼블릭 IPv4 DNS
+        username: ubuntu
+        key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        envs: GITHUB_SHA
+        script: |
+          sudo docker ps
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/catdogpia-prod
+          sudo docker run -d -p 80:8080 ${{ secrets.DOCKER_USERNAME }}/catdogpia-prod
+          sudo docker image prune -f
+
