@@ -23,7 +23,7 @@
 
 ## ⚙ 아키텍처, ERD
 ### - 아키텍처
-<img src="https://github.com/juhwan-Ki/catdogpia/blob/main/2c8ca1c54b8db9f6.png" width="600" height="500"/>
+<img src="https://github.com/juhwan-Ki/Catdogpia_/assets/87765888/72a760eb-dee3-40c1-b9ee-499984479a7b" width="600" height="500"/>
 
 
 ### - ERD
