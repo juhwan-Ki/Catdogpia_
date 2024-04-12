@@ -51,7 +51,7 @@ https://www.erdcloud.com/d/nL2CXshZxY9vNDQSx
 #### - DBMS : MySQL
 #### - 프레임워크 : Spring Boot
 #### - 클라우드 플랫폼 : RDS, S3
-#### - 배포 : EC2, Docker
+#### - 배포 : EC2, Docker, Github Action
 <br>
 
 ## 📝 주요 기능
